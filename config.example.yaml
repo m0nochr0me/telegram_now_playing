@@ -13,3 +13,8 @@ default:
   track: '--'
   photo: 'default.png'
   bio: 'Default bio'
+
+img:
+  size: 800
+  margin: 50
+  wrap: 22

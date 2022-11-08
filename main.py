@@ -8,6 +8,7 @@ import sys
 import time
 import yaml
 import random
+import textwrap
 import dbus
 from dbus.exceptions import DBusException
 from PIL import Image, ImageDraw, ImageFont, ImageColor
@@ -38,7 +39,8 @@ while True:
 
 # Prepare font
 font_properties = font_manager.FontProperties(family=config['font']['family'], weight=config['font']['weight'])
-font = ImageFont.truetype('code.ttf', config['font']['size'])
+font_file = font_manager.findfont(font_properties)
+font = ImageFont.truetype(font_file, config['font']['size'])
 
 # Global metadata variable
 metadata = dbus.Dictionary()
@@ -51,10 +53,20 @@ def rndcol(saturation=86, value=85) -> tuple:
 
 async def make_image(artist, track) -> None:
     """Save image with given artist and track"""
-    img = Image.new('RGB', (800, 800), color=rndcol(30, 13))
+    size = config['img']['size']
+    margin = config['img']['margin']
+    img = Image.new('RGB', (size, size), color=rndcol(30, 13))
     d = ImageDraw.Draw(img)
-    d.text((400, 350), artist, fill=rndcol(), anchor='mm', font=font)
-    d.text((400, 450), track, fill=rndcol(), anchor='mm', font=font)
+    d.multiline_text((size//2, size//2-margin),
+                     textwrap.fill(artist, config['img']['wrap']),
+                     fill=rndcol(),
+                     anchor='md',
+                     font=font)
+    d.multiline_text((size//2, size//2+margin),
+                     textwrap.fill(track, config['img']['wrap']),
+                     fill=rndcol(),
+                     anchor='ma',
+                     font=font)
     img.save('out.png', 'PNG')
 
 
