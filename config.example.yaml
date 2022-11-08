@@ -1,0 +1,15 @@
+tg:
+  app_id: 12345678
+  app_hash: 'deadcafe0b1680085000000000000000'
+  user: 'username'
+
+font:
+  family: 'Code2000'
+  weight: 'regular'
+  size: 56
+
+default:
+  artist: '--'
+  track: '--'
+  photo: 'default.png'
+  bio: 'Default bio'
